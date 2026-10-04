@@ -11,7 +11,7 @@ RUN rm -rf /usr/local/tomcat/webapps/* \
 RUN mkdir -p /uploads && chmod 777 /uploads
 
 # Set standard JVM and container options
-ENV CATALINA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom -Dapp.storage.upload-dir=/uploads"
+ENV CATALINA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom -Dapp.storage.upload-dir=/uploads -DAPP_CONFIG_DIR=/opt/petstore"
 
 # Copy WAR file as ROOT.war so endpoints are mapped directly to /api/**
 ARG WAR_FILE=petstore.war

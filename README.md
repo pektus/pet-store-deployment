@@ -38,7 +38,7 @@ flowchart LR
 | Service | Base Image | Role | Port | Volumes |
 | :--- | :--- | :--- | :--- | :--- |
 | **`frontend`** | `httpd:2.4-alpine` | Serves Angular SPA bundle, handles HTML5 pushState routing, reverse-proxies `/api/*` to Tomcat | `80:80` | None |
-| **`backend`** | `tomcat:11.0-jdk21-temurin` | Pure Spring 7 REST API (`ROOT.war`), executes Flyway DB migrations automatically on startup | `8080` (internal) | `uploads_data:/uploads` |
+| **`backend`** | `tomcat:11.0-jdk21-temurin` | Pure Spring 7 REST API (`ROOT.war`), executes Flyway DB migrations automatically on startup | `8080` (internal) | `uploads_data:/uploads`<br>`./backend/conf:/opt/petstore/apps/conf:ro` |
 | **`db`** | `postgres:16-alpine` | PostgreSQL 16 database | `5432` (internal) | `postgres_data:/var/lib/postgresql/data` |
 
 ---

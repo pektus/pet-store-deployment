@@ -111,6 +111,11 @@ if [[ ! -f "frontend/pet-store-frontend.zip" ]]; then
     exit 1
 fi
 
+if [[ ! -f "backend/conf/application.properties" ]]; then
+    echo "ERROR: Missing 'backend/conf/application.properties'. Ensure the external configuration file is staged before running."
+    exit 1
+fi
+
 # Ensure .env exists
 if [[ ! -f ".env" ]]; then
     if [[ -f ".env.example" ]]; then

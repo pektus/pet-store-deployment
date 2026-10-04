@@ -98,12 +98,13 @@ pipeline {
                             export SCP_OPTS="-i \${SSH_KEY} -P ${targetPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
                             echo "Ensuring deployment directory structure on ${sshUser}@${targetHost}..."
-                            ssh \${SSH_OPTS} ${sshUser}@${targetHost} "mkdir -p ${deployPath}/backend ${deployPath}/frontend ${deployPath}/scripts"
+                            ssh \${SSH_OPTS} ${sshUser}@${targetHost} "mkdir -p ${deployPath}/backend/conf ${deployPath}/frontend ${deployPath}/scripts"
 
                             echo "Transferring Docker compose & service manifests..."
                             scp \${SCP_OPTS} docker-compose.yml ${sshUser}@${targetHost}:${deployPath}/docker-compose.yml
                             scp \${SCP_OPTS} .env.example ${sshUser}@${targetHost}:${deployPath}/.env.example
                             scp \${SCP_OPTS} backend/Dockerfile ${sshUser}@${targetHost}:${deployPath}/backend/Dockerfile
+                            scp \${SCP_OPTS} backend/conf/application.properties ${sshUser}@${targetHost}:${deployPath}/backend/conf/application.properties
                             scp \${SCP_OPTS} frontend/Dockerfile ${sshUser}@${targetHost}:${deployPath}/frontend/Dockerfile
                             scp \${SCP_OPTS} frontend/httpd.conf ${sshUser}@${targetHost}:${deployPath}/frontend/httpd.conf
                             scp \${SCP_OPTS} scripts/deploy.sh ${sshUser}@${targetHost}:${deployPath}/scripts/deploy.sh

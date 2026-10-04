@@ -88,7 +88,7 @@ chown -R "${DEPLOY_USER}:${DEPLOY_USER}" "${SSH_DIR}"
 
 # Create application deployment directory
 echo ">>> Setting up application directory at ${DEPLOY_DIR}..."
-mkdir -p "${DEPLOY_DIR}/backend" "${DEPLOY_DIR}/frontend" "${DEPLOY_DIR}/scripts"
+mkdir -p "${DEPLOY_DIR}/backend/conf" "${DEPLOY_DIR}/frontend" "${DEPLOY_DIR}/scripts"
 chown -R "${DEPLOY_USER}:docker" "${DEPLOY_DIR}"
 chmod -R 775 "${DEPLOY_DIR}"
 

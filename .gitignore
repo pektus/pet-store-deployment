@@ -1,0 +1,22 @@
+# Environment Configuration
+.env
+
+# Binary artifacts and archives
+*.war
+*.jar
+*.zip
+*.tar.gz
+backend/*.war
+frontend/*.zip
+
+# Data and logs
+data/
+uploads/
+logs/
+*.log
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

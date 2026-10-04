@@ -1,0 +1,92 @@
+services:
+  # ==============================================================================
+  # Database Service: PostgreSQL 16
+  # ==============================================================================
+  db:
+    image: postgres:16-alpine
+    container_name: petstore-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-petstoredb}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - petstore-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-petstoredb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # ==============================================================================
+  # Backend Service: Apache Tomcat 11 (Java 21 / Servlet 6.0+)
+  # ==============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        WAR_FILE: petstore.war
+    image: petstore-backend:${APP_VERSION:-latest}
+    container_name: petstore-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      JDBC_DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-petstoredb}
+      JDBC_DATABASE_USERNAME: ${POSTGRES_USER:-postgres}
+      JDBC_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      APP_STORAGE_UPLOAD_DIR: /uploads
+      APP_CORS_ALLOWED_ORIGINS: http://192.168.1.235,http://localhost
+    volumes:
+      - uploads_data:/uploads
+    networks:
+      - petstore-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s http://localhost:8080/api/pets > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ==============================================================================
+  # Frontend Service: Apache HTTP Server 2.4 (Reverse Proxy & Angular SPA)
+  # ==============================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        FRONTEND_ARTIFACT: pet-store-frontend.zip
+    image: petstore-frontend:${APP_VERSION:-latest}
+    container_name: petstore-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${HOST_PORT:-80}:80"
+    networks:
+      - petstore-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+networks:
+  petstore-net:
+    name: petstore-net
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: petstore_postgres_data
+  uploads_data:
+    name: petstore_uploads_data

@@ -20,3 +20,5 @@ logs/
 Thumbs.db
 .idea/
 .vscode/
+
+/.project

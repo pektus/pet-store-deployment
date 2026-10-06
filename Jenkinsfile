@@ -44,7 +44,7 @@ pipeline {
     environment {
         // Gitea Configuration
         GITEA_URL                  = 'http://192.168.1.233'
-        GITEA_PACKAGE_OWNER        = 'DevHome'
+        GITEA_PACKAGE_OWNER        = 'ProdHome'
         
         // Credentials IDs
         GITEA_TOKEN_CRED_ID        = 'gitea-token'        // Secret text (Gitea PAT for package registry)

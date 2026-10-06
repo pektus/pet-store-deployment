@@ -196,8 +196,8 @@ Once deployed, access the application from any device on your local network:
 * **Frontend Angular SPA**: [http://192.168.1.235](http://192.168.1.235)
 * **Backend REST API**: [http://192.168.1.235/api/pets](http://192.168.1.235/api/pets)
 * **Default Seeded Admin Account**:
-  - **Username**: `admin` (or `admin@petstore.com`)
-  - **Password**: `Admin@123`
+  - **Username**: `admin` (or `admin@petstore.internal`)
+  - **Password**: `Password123!`
 
 ---
 
